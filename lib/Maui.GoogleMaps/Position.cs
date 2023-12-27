@@ -1,26 +1,17 @@
 ﻿
 namespace Maui.GoogleMaps
 {
-    public struct Position
+    public struct Position(double latitude, double longitude)
     {
-        public Position(double latitude, double longitude)
+        public double Latitude { get; } = Math.Min(Math.Max(latitude, -90.0), 90.0);
+
+        public double Longitude { get; } = Math.Min(Math.Max(longitude, -180.0), 180.0);
+
+        public override bool Equals(object? obj)
         {
-            Latitude = Math.Min(Math.Max(latitude, -90.0), 90.0);
-            Longitude = Math.Min(Math.Max(longitude, -180.0), 180.0);
-        }
-
-        public double Latitude { get; }
-
-        public double Longitude { get; }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
+            if (obj is not Position other)
                 return false;
-            if (!(obj is Position) || ReferenceEquals(null, this))
-                return false;
-            var other = (Position)obj;
-            return Latitude == other.Latitude && Longitude == other.Longitude;
+            return (decimal)Latitude == (decimal)other.Latitude && (decimal)Longitude == (decimal)other.Longitude;
         }
 
         public override int GetHashCode()
